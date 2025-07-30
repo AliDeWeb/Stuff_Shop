@@ -1,6 +1,7 @@
 package com.github.alideweb.stuffshop.modules.products;
 
 import com.github.alideweb.stuffshop.modules.products.dto.ProductCreateRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
