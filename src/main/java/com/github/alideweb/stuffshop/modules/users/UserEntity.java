@@ -30,6 +30,7 @@ public class UserEntity {
     @Column(length = 32)
     private String lastName;
 
-    @Column()
+    @Column(columnDefinition = "varchar(10) default 'User'")
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 }
