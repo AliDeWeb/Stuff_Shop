@@ -40,7 +40,8 @@ docker-compose up -d
 
 ## 🔧 Endpoints
 
-Swagger UI is available at: http://localhost:8080/document
+Swagger UI is available at: /api/docs
+Open API is available at: /api/openapi
 
 ## 💡 Contributing
 
