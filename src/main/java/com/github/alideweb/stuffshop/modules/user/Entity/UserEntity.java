@@ -22,7 +22,10 @@ public class UserEntity {
     @Column(unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
+
     private String password;
     private String name;
-    private UserRoles role;
+
 }
