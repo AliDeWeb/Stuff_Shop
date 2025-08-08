@@ -1,0 +1,48 @@
+package com.github.alideweb.stuffshop.modules.auth;
+
+import com.github.alideweb.stuffshop.common.dto.ApiResponse;
+import com.github.alideweb.stuffshop.modules.auth.dto.SignUpRequestDto;
+import com.github.alideweb.stuffshop.modules.auth.dto.UserResponseDto;
+import com.github.alideweb.stuffshop.modules.user.Entity.UserEntity;
+import com.github.alideweb.stuffshop.modules.user.UserService;
+import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final UserService userService;
+
+    public ResponseEntity<ApiResponse<UserResponseDto>> singUp(@Valid @RequestBody SignUpRequestDto request) {
+        var user = new UserEntity();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setName(request.getName());
+        user.setRole(UserRoles.USER);
+
+        var saved = userService.registerUser(user);
+
+        var userDto = UserResponseDto.builder()
+                .username(saved.getUsername())
+                .email(saved.getEmail())
+                .role(saved.getRole())
+                .name(saved.getName())
+                .build();
+
+        var response = ApiResponse.<UserResponseDto>builder()
+                .message("you signed up successfully")
+                .status(HttpStatus.CREATED.value())
+                .data(userDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}
