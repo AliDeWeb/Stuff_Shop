@@ -11,4 +11,5 @@ public class UserResponseDto {
     private String email;
     private String name;
     private UserRoles role;
+    private String token;
 }

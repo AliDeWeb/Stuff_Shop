@@ -3,6 +3,7 @@ package com.github.alideweb.stuffshop.modules.auth;
 import com.github.alideweb.stuffshop.common.dto.ApiResponse;
 import com.github.alideweb.stuffshop.modules.auth.dto.SignUpRequestDto;
 import com.github.alideweb.stuffshop.modules.auth.dto.UserResponseDto;
+import com.github.alideweb.stuffshop.modules.jwt.JwtService;
 import com.github.alideweb.stuffshop.modules.user.Entity.UserEntity;
 import com.github.alideweb.stuffshop.modules.user.UserService;
 import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication", description = "User sign up, login and auth related operations")
 public class AuthController {
     private final UserService userService;
+    private final JwtService jwtService;
 
     @PostMapping("/sign-up")
     public ResponseEntity<ApiResponse<UserResponseDto>> singUp(@Valid @RequestBody SignUpRequestDto request) {
@@ -33,12 +35,14 @@ public class AuthController {
         user.setRole(UserRoles.USER);
 
         var saved = userService.registerUser(user);
+        var jwt = jwtService.generateJwtToken(saved.getUsername(), saved.getRole());
 
         var userDto = UserResponseDto.builder()
                 .username(saved.getUsername())
                 .email(saved.getEmail())
                 .role(saved.getRole())
                 .name(saved.getName())
+                .token(jwt)
                 .build();
 
         var response = ApiResponse.<UserResponseDto>builder()
