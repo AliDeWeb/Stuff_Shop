@@ -21,7 +21,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityExceptionHandlers implements AuthenticationEntryPoint, AccessDeniedHandler {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
