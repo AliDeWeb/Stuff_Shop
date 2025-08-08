@@ -4,7 +4,7 @@ import com.github.alideweb.stuffshop.common.dto.ApiResponse;
 import com.github.alideweb.stuffshop.modules.auth.dto.SignUpRequestDto;
 import com.github.alideweb.stuffshop.modules.auth.dto.UserResponseDto;
 import com.github.alideweb.stuffshop.modules.jwt.JwtService;
-import com.github.alideweb.stuffshop.modules.user.Entity.UserEntity;
+import com.github.alideweb.stuffshop.modules.user.entity.UserEntity;
 import com.github.alideweb.stuffshop.modules.user.UserService;
 import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
 import io.swagger.v3.oas.annotations.tags.Tag;

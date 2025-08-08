@@ -1,7 +1,7 @@
 package com.github.alideweb.stuffshop.modules.user;
 
 import com.github.alideweb.stuffshop.exceptions.UserNotFoundException;
-import com.github.alideweb.stuffshop.modules.user.Entity.UserEntity;
+import com.github.alideweb.stuffshop.modules.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

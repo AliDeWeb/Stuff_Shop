@@ -1,6 +1,6 @@
 package com.github.alideweb.stuffshop.modules.user;
 
-import com.github.alideweb.stuffshop.modules.user.Entity.UserEntity;
+import com.github.alideweb.stuffshop.modules.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.github.alideweb.stuffshop.modules.user.Entity;
+package com.github.alideweb.stuffshop.modules.user.entity;
 
 import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
 import jakarta.persistence.*;
