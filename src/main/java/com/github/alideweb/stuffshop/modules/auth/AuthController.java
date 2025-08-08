@@ -28,7 +28,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ApiResponse<UserResponseDto>> singUp(@Valid @RequestBody SignUpRequestDto request) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto request) {
         var user = new UserEntity();
         user.setUsername(request.getUsername().trim().toLowerCase());
         user.setEmail(request.getEmail().trim().toLowerCase());
