@@ -14,7 +14,7 @@ public class UserService {
 
     public UserEntity findByUsername(String username) throws UserNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("user with username: " + username + " not found"));
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     public UserEntity registerUser(UserEntity user) {
