@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: stuff-shop-postgres-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: stuff-shop-postgres-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
