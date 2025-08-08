@@ -24,7 +24,13 @@ public class SecurityConfigs {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(
+                                "/docs/**",
+                                "/openapi/**",
+                                "/swagger-ui/**",
+                                "/auth/**",
+                                "/health/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
