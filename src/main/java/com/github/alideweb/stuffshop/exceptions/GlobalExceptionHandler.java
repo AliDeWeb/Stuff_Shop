@@ -1,6 +1,8 @@
 package com.github.alideweb.stuffshop.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -62,6 +65,33 @@ public class GlobalExceptionHandler {
         pd.setDetail(detail);
         pd.setInstance(URI.create(request.getRequestURI()));
         pd.setProperty("code", "ERR_MISSING_PARAMETER");
+
+        return ResponseEntity.badRequest().body(pd);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ProblemDetail> handleMultipartError(MultipartException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        pd.setTitle("File upload error");
+        pd.setDetail("An error occurred while processing the file upload");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("code", "ERR_FILE_UPLOAD");
+
+        return ResponseEntity.badRequest().body(pd);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ProblemDetail> handleConstraintViolations(ConstraintViolationException ex, HttpServletRequest request) {
+        String message = ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining("; "));
+
+        ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        pd.setTitle("Constraint Violation");
+        pd.setDetail(message);
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("code", "ERR_CONSTRAINT_VIOLATION");
 
         return ResponseEntity.badRequest().body(pd);
     }
