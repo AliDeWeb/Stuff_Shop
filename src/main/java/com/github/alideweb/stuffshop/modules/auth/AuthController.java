@@ -39,7 +39,6 @@ public class AuthController {
                 .map(String::toLowerCase)
                 .orElse(null);
         user.setName(name);
-        user.setName(request.getName());
         user.setRole(UserRoles.USER);
 
         var saved = userService.registerUser(user);
