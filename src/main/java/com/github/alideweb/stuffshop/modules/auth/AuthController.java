@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -28,9 +30,15 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<ApiResponse<UserResponseDto>> singUp(@Valid @RequestBody SignUpRequestDto request) {
         var user = new UserEntity();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername().trim().toLowerCase());
+        user.setEmail(request.getEmail().trim().toLowerCase());
         user.setPassword(request.getPassword());
+        String name = Optional.ofNullable(request.getName())
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .map(String::toLowerCase)
+                .orElse(null);
+        user.setName(name);
         user.setName(request.getName());
         user.setRole(UserRoles.USER);
 
