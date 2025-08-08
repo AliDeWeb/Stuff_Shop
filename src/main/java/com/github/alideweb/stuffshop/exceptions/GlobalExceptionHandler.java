@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,22 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
     private final ExceptionMapper mapper;
 
     @ExceptionHandler(BaseHttpException.class)
     public ResponseEntity<ProblemDetail> handleBaseException(BaseHttpException ex, HttpServletRequest request) {
+        log.error("BaseHttpException caught: {} at {}", ex.getMessage(), request.getRequestURI(), ex);
+
         ProblemDetail pd = mapper.toProblemDetail(ex, request);
         return ResponseEntity.status(ex.getStatus()).body(pd);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ProblemDetail> handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        log.error("Validation error at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         String message = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -47,6 +53,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ProblemDetail> handleJsonParseError(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        log.error("Invalid JSON at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         pd.setTitle("Malformed JSON request");
         pd.setDetail("Could not parse JSON body");
@@ -58,6 +66,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ProblemDetail> handleMissingRequestParam(MissingServletRequestParameterException ex, HttpServletRequest request) {
+        log.error("Missing request parameter at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         String detail = String.format("Required query parameter '%s' is missing", ex.getParameterName());
 
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
@@ -71,6 +81,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MultipartException.class)
     public ResponseEntity<ProblemDetail> handleMultipartError(MultipartException ex, HttpServletRequest request) {
+        log.error("Multipart error at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         pd.setTitle("File upload error");
         pd.setDetail("An error occurred while processing the file upload");
@@ -82,6 +94,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ProblemDetail> handleConstraintViolations(ConstraintViolationException ex, HttpServletRequest request) {
+        log.error("Constraint violation at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         String message = ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
@@ -98,6 +112,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleGenericException(Exception ex, HttpServletRequest request) {
+        log.error("Unexpected error at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+
         ProblemDetail pd = mapper.toInternalServerError(ex, request);
         return ResponseEntity.internalServerError().body(pd);
     }
