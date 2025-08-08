@@ -1,5 +1,6 @@
 package com.github.alideweb.stuffshop.modules.user.Entity;
 
+import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class UserEntity {
 
     private String password;
     private String name;
+    private UserRoles role;
 }
