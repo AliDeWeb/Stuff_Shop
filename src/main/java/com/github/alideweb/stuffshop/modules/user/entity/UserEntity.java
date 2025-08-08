@@ -1,21 +1,16 @@
 package com.github.alideweb.stuffshop.modules.user.entity;
 
+import com.github.alideweb.stuffshop.common.entity.BaseEntity;
 import com.github.alideweb.stuffshop.modules.user.enums.UserRoles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "Users")
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+@Getter
+@Setter
+public class UserEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
