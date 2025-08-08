@@ -16,16 +16,18 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRoles role;
 
+    @Column(nullable = false)
     private String password;
-    private String name;
 
+    private String name;
 }
