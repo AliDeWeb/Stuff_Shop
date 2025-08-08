@@ -30,7 +30,7 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<ApiResponse<UserResponseDto>> signUp(@Valid @RequestBody SignUpRequestDto request) {
         var user = new UserEntity();
-        user.setUsername(request.getUsername().trim().toLowerCase());
+        user.setUsername(request.getUsername().trim().toLowerCase().replace(" ", "_"));
         user.setEmail(request.getEmail().trim().toLowerCase());
         user.setPassword(request.getPassword());
         String name = Optional.ofNullable(request.getName())
