@@ -1,5 +1,6 @@
 package com.github.alideweb.stuffshop.configs;
 
+import com.github.alideweb.stuffshop.exceptions.SecurityExceptionHandlers;
 import com.github.alideweb.stuffshop.filters.JwtFilters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +21,13 @@ public class SecurityConfigs {
     private final JwtFilters jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityExceptionHandlers securityExceptionHandlers) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(securityExceptionHandlers)
+                        .accessDeniedHandler(securityExceptionHandlers)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/docs/**",
