@@ -2,8 +2,10 @@ package com.github.alideweb.stuffshop.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +37,17 @@ public class GlobalExceptionHandler {
         pd.setDetail(message);
         pd.setInstance(URI.create(request.getRequestURI()));
         pd.setProperty("code", "ERR_VALIDATION_FAILED");
+
+        return ResponseEntity.badRequest().body(pd);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ProblemDetail> handleJsonParseError(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        pd.setTitle("Malformed JSON request");
+        pd.setDetail("Could not parse JSON body");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("code", "ERR_INVALID_JSON");
 
         return ResponseEntity.badRequest().body(pd);
     }
